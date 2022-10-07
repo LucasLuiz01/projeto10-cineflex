@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 export default function PageTwo({ filmeEscolhido, setFilmeEscolhido }) {
   const params = useParams();
   useEffect(() => {
@@ -15,7 +16,7 @@ export default function PageTwo({ filmeEscolhido, setFilmeEscolhido }) {
     });
   }, []);
   if (filmeEscolhido !== null) {
-    console.log(filmeEscolhido);
+    console.log(filmeEscolhido)
     return (
       <>
         <Chose>
@@ -29,7 +30,9 @@ export default function PageTwo({ filmeEscolhido, setFilmeEscolhido }) {
               </Dia>
               <Horario>
                 {info.showtimes.map((inf) => (
+                    <Link to={`/sessao/${inf.id}`}>
                   <button>{inf.name}</button>
+                  </Link>
                 ))}
               </Horario>
             </>

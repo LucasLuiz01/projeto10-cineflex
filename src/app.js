@@ -3,9 +3,11 @@ import PageChoseMovie from "./PageOne";
 import React from "react";
 import PageTwo from "./PageTwo";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PageTree from "./PageTree";
 
 export default function App() {
   const [filmeEscolhido, setFilmeEscolhido] = React.useState(null);
+  const [sessaoEscolhido, setSessaoEscolhido] = React.useState(null);
 
   return (
     <BrowserRouter>
@@ -24,6 +26,9 @@ export default function App() {
               />
             }
           />
+          <Route path="/sessao/:idSessao" element={
+          <PageTree setSessaoEscolhido={setSessaoEscolhido} sessaoEscolhido={sessaoEscolhido} />
+          } />
         </Routes>
       </Container>
     </BrowserRouter>
