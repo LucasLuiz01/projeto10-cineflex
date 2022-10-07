@@ -44,9 +44,15 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
             <p >CPF do comprador:</p>
             <input type="text" placeholder="Digite seu CPF..."></input> 
             </Compra>
+            <Flex>
             <EscolherAssento>Reservar assento(s)</EscolherAssento>
+            </Flex>
             <Footer><img src={sessaoEscolhido.movie.posterURL} />
-            <p>{sessaoEscolhido.movie.title} {sessaoEscolhido.day.weekday} {sessaoEscolhido.day.date}</p></Footer>
+            <FLexDirection>
+            <p>{sessaoEscolhido.movie.title} </p>
+            <p>{sessaoEscolhido.day.weekday} - {sessaoEscolhido.name}</p>
+            </FLexDirection>
+            </Footer>
       </>
     );
   }
@@ -156,3 +162,10 @@ const Footer = styled.div`
     margin-left: 20px;
   }
 `;
+const FLexDirection = styled.div`
+flex-direction: column;
+`
+const Flex = styled.div`
+display:  flex;
+justify-content: center;
+`
