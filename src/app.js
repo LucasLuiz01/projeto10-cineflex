@@ -4,6 +4,7 @@ import React from "react";
 import PageTwo from "./PageTwo";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PageTree from "./PageTree";
+import { GlobalStyle } from "./globalstyle";
 
 export default function App() {
   const [filmeEscolhido, setFilmeEscolhido] = React.useState(null);
@@ -11,6 +12,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+    <GlobalStyle />
       <Container>
         <Menu>
           <p>CINEFLIX</p>
