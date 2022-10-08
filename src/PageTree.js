@@ -14,7 +14,6 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
   let array = [];
 
   const params = useParams();
-  console.log(params.idSessao);
 
   function Selecionar(info) {
     if (info.isAvailable === false) {
@@ -46,7 +45,6 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
 
       return array;
     }
-    console.log(array)
     if(array[0] !== undefined){
     const url = "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many"
     const promisse = axios.post(url, {
@@ -54,10 +52,11 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
 	    name: nome,
 	    cpf: cpf
     })
-    promisse.then((a)=> console.log(a))
+    promisse.then((a)=> 
+    navigate("/sucesso"))
     promisse.catch((err)=> console.log(err.response.data))
 } else{
-    alert("Selecione pelo menos 1 assento")
+    alert("Selecione pelo menos 1 assento válido")
     return
 }
   }

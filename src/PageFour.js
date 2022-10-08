@@ -2,7 +2,7 @@ import styled from "styled-components";
 export default function PageFour() {
   return (
     <Chose>
-      <p>Selecione o filme</p>
+      <p>Pedido feito com sucesso!</p>
     </Chose>
   );
 }
@@ -17,6 +17,6 @@ const Chose = styled.div`
     font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 24px;
-    color: #293845;
+    color: #247A6B;
   }
 `;
