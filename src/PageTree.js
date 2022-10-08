@@ -2,32 +2,67 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import * as helpers from "./helpers";
 
 export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
-    const [chosen, setChosen] = useState({});
-  const paramis = useParams();
-  console.log(paramis.idSessao);
+  const [chosen, setChosen] = useState([]);
+  const [nome, setNome] = useState("");
+  const [cpf, setCpf] = useState(Number);
+  const navigate = useNavigate();
+  let newChosen = {};
+  let array = [];
 
+  const params = useParams();
+  console.log(params.idSessao);
 
-  function Selecionar(info){
-    if(info.isAvailable === false){
-        alert("Esse assento não está disponível")
-        return
+  function Selecionar(info) {
+    if (info.isAvailable === false) {
+      alert("Esse assento não está disponível");
+      return;
     }
-    if(chosen[info.id]=== true){
-        chosen[info.id] = false
-        const newChosen = {...chosen};
-        newChosen[info.id] = false
-        setChosen(newChosen); 
-       return
+    if (chosen[info.id] === true) {
+      chosen[info.id] = false;
+      const newChosen = { ...chosen };
+      newChosen[info.id] = false;
+      setChosen(newChosen);
+      return;
     }
-    const newChosen = {...chosen};
-    newChosen[info.id] = true
-    setChosen(newChosen); 
-    console.log(chosen)
+    newChosen = { ...chosen };
+    newChosen[info.id] = true;
+    setChosen(newChosen);
+  }
+  function postData(event) {
+    event.preventDefault();
+
+    objToArray(chosen);
+
+    function objToArray(obj) {
+      Object.keys(obj).forEach((key) => {
+        if (obj[key] === true) {
+          array.push(key);
+        }
+      });
+
+      return array;
+    }
+    console.log(array)
+    if(array[0] !== undefined){
+    const url = "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many"
+    const promisse = axios.post(url, {
+        ids: array,
+	    name: nome,
+	    cpf: cpf
+    })
+    promisse.then((a)=> console.log(a))
+    promisse.catch((err)=> console.log(err.response.data))
+} else{
+    alert("Selecione pelo menos 1 assento")
+    return
+}
   }
   useEffect(() => {
-    const Url = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${paramis.idSessao}/seats`;
+    const Url = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${params.idSessao}/seats`;
     const promisse = axios.get(Url);
     promisse.then((movie) => {
       setSessaoEscolhido(movie.data);
@@ -37,7 +72,6 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
     });
   }, []);
   if (sessaoEscolhido !== null) {
-
     return (
       <>
         <Chose>
@@ -45,7 +79,13 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
         </Chose>
         <Assentos>
           {sessaoEscolhido.seats.map((info) => (
-            <Botao onClick={()=>Selecionar(info)} isAvailable={info.isAvailable} isSelected={chosen[info.id] === true}>{info.name}</Botao>
+            <Botao
+              onClick={() => Selecionar(info)}
+              isAvailable={info.isAvailable}
+              isSelected={chosen[info.id] === true}
+            >
+              {info.name}
+            </Botao>
           ))}
         </Assentos>
         <Disponibilidade>
@@ -53,27 +93,42 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
           <Button color="#FBE192" />
         </Disponibilidade>
         <Disponibilidade>
-            <p>Selecionado</p>
-            <p>Disponível</p>
-            <p>Indisponível</p>
-            </Disponibilidade>
-            <form>
-            <Compra>
+          <p>Selecionado</p>
+          <p>Disponível</p>
+          <p>Indisponível</p>
+        </Disponibilidade>
+        <form onSubmit={postData}>
+          <Compra>
             <p>Nome do comprador:</p>
-            <input required type="text" placeholder="Digite seu nome..."></input> 
-            <p >CPF do comprador:</p>
-            <input required type="text" placeholder="Digite seu CPF..."></input> 
-            </Compra>
-            <Flex>
-            <EscolherAssento>Reservar assento(s)</EscolherAssento>
-            </Flex>
-            </form>
-            <Footer><img src={sessaoEscolhido.movie.posterURL} />
-            <FLexDirection>
+            <input
+              required
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              placeholder="Digite seu nome..."
+            ></input>
+            <p>CPF do comprador:</p>
+            <input
+              required
+              type="text"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value)}
+              placeholder="Digite seu CPF..."
+            ></input>
+          </Compra>
+          <Flex>
+            <EscolherAssento type="submit">Reservar assento(s)</EscolherAssento>
+          </Flex>
+        </form>
+        <Footer>
+          <img src={sessaoEscolhido.movie.posterURL} />
+          <FLexDirection>
             <p>{sessaoEscolhido.movie.title} </p>
-            <p>{sessaoEscolhido.day.weekday} - {sessaoEscolhido.name}</p>
-            </FLexDirection>
-            </Footer>
+            <p>
+              {sessaoEscolhido.day.weekday} - {sessaoEscolhido.name}
+            </p>
+          </FLexDirection>
+        </Footer>
       </>
     );
   }
@@ -109,7 +164,12 @@ const Botao = styled.button`
   margin-right: 7px;
   margin-bottom: 18px;
   color: black;
-  background: ${props => props.isSelected === true ? "#1AAE9E" : (props.isAvailable === true ? "#C3CFD9": "#FBE192")};
+  background: ${(props) =>
+    props.isSelected === true
+      ? "#1AAE9E"
+      : props.isAvailable === true
+      ? "#C3CFD9"
+      : "#FBE192"};
   border: 1px solid #808f9d;
   border-radius: 12px;
 `;
@@ -134,31 +194,31 @@ const Button = styled.button`
   border-radius: 12px;
 `;
 const Compra = styled.div`
-background-color: #ffffff;
+  background-color: #ffffff;
   width: 100vw;
-  p{
+  p {
     font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 18px;
     color: #293845;
   }
-  input{
+  input {
     width: 80vw;
     height: 51px;
     margin-bottom: 20px;
-    border: 1px solid #D4D4D4;
+    border: 1px solid #d4d4d4;
   }
-`
+`;
 const EscolherAssento = styled.button`
-    font-family: "Roboto", sans-serif;
-    background-color: #e8833a;
-    font-weight: 400;
-    border-radius: 3px;
-    width: 225px;
-    height: 43px;
-    color: white;
-    text-align: center;
-    font-size: 18px;
+  font-family: "Roboto", sans-serif;
+  background-color: #e8833a;
+  font-weight: 400;
+  border-radius: 3px;
+  width: 225px;
+  height: 43px;
+  color: white;
+  text-align: center;
+  font-size: 18px;
 `;
 const Footer = styled.div`
   background-color: #dfe6ed;
@@ -170,12 +230,12 @@ const Footer = styled.div`
   bottom: 0;
   position: fixed;
   border: 1px solid #9eadba;
-    img {
-        width: 48px;
-        height: 72px;
-        margin-left: 20px;
+  img {
+    width: 48px;
+    height: 72px;
+    margin-left: 20px;
   }
-    p {
+  p {
     font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 26px;
@@ -184,9 +244,9 @@ const Footer = styled.div`
   }
 `;
 const FLexDirection = styled.div`
-flex-direction: column;
-`
+  flex-direction: column;
+`;
 const Flex = styled.div`
-display:  flex;
-justify-content: center;
-`
+  display: flex;
+  justify-content: center;
+`;

@@ -5,6 +5,7 @@ import PageTwo from "./PageTwo";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PageTree from "./PageTree";
 import { GlobalStyle } from "./globalstyle";
+import PageFour from "./PageFour";
 
 export default function App() {
   const [filmeEscolhido, setFilmeEscolhido] = React.useState(null);
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/sessao/:idSessao" element={
           <PageTree setSessaoEscolhido={setSessaoEscolhido} sessaoEscolhido={sessaoEscolhido} />
           } />
+          <Route path="/sucesso" element={<PageFour />} />
         </Routes>
       </Container>
     </BrowserRouter>
