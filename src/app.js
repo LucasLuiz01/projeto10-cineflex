@@ -9,7 +9,6 @@ import { GlobalStyle } from "./globalstyle";
 export default function App() {
   const [filmeEscolhido, setFilmeEscolhido] = React.useState(null);
   const [sessaoEscolhido, setSessaoEscolhido] = React.useState(null);
-
   return (
     <BrowserRouter>
     <GlobalStyle />

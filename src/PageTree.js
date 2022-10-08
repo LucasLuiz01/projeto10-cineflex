@@ -1,12 +1,31 @@
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
+    const [chosen, setChosen] = useState({});
   const paramis = useParams();
-  const collorsButton = ["#FF3030", "#FF922E", "#2FBE34"];
   console.log(paramis.idSessao);
+
+
+  function Selecionar(info){
+    if(info.isAvailable === false){
+        alert("Esse assento não está disponível")
+        return
+    }
+    if(chosen[info.id]=== true){
+        chosen[info.id] = false
+        const newChosen = {...chosen};
+        newChosen[info.id] = false
+        setChosen(newChosen); 
+       return
+    }
+    const newChosen = {...chosen};
+    newChosen[info.id] = true
+    setChosen(newChosen); 
+    console.log(chosen)
+  }
   useEffect(() => {
     const Url = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${paramis.idSessao}/seats`;
     const promisse = axios.get(Url);
@@ -18,7 +37,7 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
     });
   }, []);
   if (sessaoEscolhido !== null) {
-    console.log(sessaoEscolhido);
+
     return (
       <>
         <Chose>
@@ -26,7 +45,7 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
         </Chose>
         <Assentos>
           {sessaoEscolhido.seats.map((info) => (
-            <Botao>{info.name}</Botao>
+            <Botao onClick={()=>Selecionar(info)} isAvailable={info.isAvailable} isSelected={chosen[info.id] === true}>{info.name}</Botao>
           ))}
         </Assentos>
         <Disponibilidade>
@@ -38,15 +57,17 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
             <p>Disponível</p>
             <p>Indisponível</p>
             </Disponibilidade>
+            <form>
             <Compra>
             <p>Nome do comprador:</p>
-            <input type="text" placeholder="Digite seu nome..."></input> 
+            <input required type="text" placeholder="Digite seu nome..."></input> 
             <p >CPF do comprador:</p>
-            <input type="text" placeholder="Digite seu CPF..."></input> 
+            <input required type="text" placeholder="Digite seu CPF..."></input> 
             </Compra>
             <Flex>
             <EscolherAssento>Reservar assento(s)</EscolherAssento>
             </Flex>
+            </form>
             <Footer><img src={sessaoEscolhido.movie.posterURL} />
             <FLexDirection>
             <p>{sessaoEscolhido.movie.title} </p>
@@ -88,7 +109,7 @@ const Botao = styled.button`
   margin-right: 7px;
   margin-bottom: 18px;
   color: black;
-  background: #c3cfd9;
+  background: ${props => props.isSelected === true ? "#1AAE9E" : (props.isAvailable === true ? "#C3CFD9": "#FBE192")};
   border: 1px solid #808f9d;
   border-radius: 12px;
 `;
