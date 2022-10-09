@@ -12,11 +12,10 @@ export default function PageTwo({ filmeEscolhido, setFilmeEscolhido }) {
       setFilmeEscolhido(movie.data);
     });
     promisse.catch((erro) => {
-      console.log(erro.response.data);
+      alert(erro.response.data);
     });
   }, []);
   if (filmeEscolhido !== null) {
-    console.log(filmeEscolhido)
     return (
       <>
         <Chose>

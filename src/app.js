@@ -31,7 +31,7 @@ export default function App() {
           <Route path="/sessao/:idSessao" element={
           <PageTree setSessaoEscolhido={setSessaoEscolhido} sessaoEscolhido={sessaoEscolhido} />
           } />
-          <Route path="/sucesso" element={<PageFour />} />
+          <Route path="/sucesso" element={<PageFour sessaoEscolhido={sessaoEscolhido} />} />
         </Routes>
       </Container>
     </BrowserRouter>

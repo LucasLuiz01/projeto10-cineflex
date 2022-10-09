@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as helpers from "./helpers";
 
 export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
   const [chosen, setChosen] = useState([]);
@@ -52,9 +51,9 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
 	    name: nome,
 	    cpf: cpf
     })
-    promisse.then((a)=> 
-    navigate("/sucesso"))
-    promisse.catch((err)=> console.log(err.response.data))
+    promisse.then((a)=>{ 
+    navigate("/sucesso")})
+    promisse.catch((err)=> alert(err.response.data))
 } else{
     alert("Selecione pelo menos 1 assento válido")
     return
@@ -67,7 +66,7 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
       setSessaoEscolhido(movie.data);
     });
     promisse.catch((erro) => {
-      console.log(erro.response.data);
+      alert(erro.response.data);
     });
   }, []);
   if (sessaoEscolhido !== null) {

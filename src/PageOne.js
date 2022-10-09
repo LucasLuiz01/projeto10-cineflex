@@ -2,6 +2,7 @@ import styled from "styled-components";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+
 export default function PageChoseMovie() {
   const [object, setObject] = React.useState([1]);
   useEffect(() => {
