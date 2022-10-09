@@ -32,7 +32,10 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
   }
   function postData(event) {
     event.preventDefault();
-
+    if(cpf.length !== 11){
+        alert("O CPF tem que ter 11 digítos");
+        return
+    }
     objToArray(chosen);
 
     function objToArray(obj) {
