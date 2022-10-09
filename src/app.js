@@ -6,10 +6,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PageTree from "./PageTree";
 import { GlobalStyle } from "./globalstyle";
 import PageFour from "./PageFour";
+import { useState } from "react";
 
 export default function App() {
-  const [filmeEscolhido, setFilmeEscolhido] = React.useState(null);
-  const [sessaoEscolhido, setSessaoEscolhido] = React.useState(null);
+  const [filmeEscolhido, setFilmeEscolhido] = useState(null);
+  const [sessaoEscolhido, setSessaoEscolhido] = useState(null);
+  const [cpf, setCpf] = useState(Number);
+  const [assento, setAssento] = useState();
+  const [nome, setNome] = useState("");
   return (
     <BrowserRouter>
     <GlobalStyle />
@@ -29,9 +33,12 @@ export default function App() {
             }
           />
           <Route path="/sessao/:idSessao" element={
-          <PageTree setSessaoEscolhido={setSessaoEscolhido} sessaoEscolhido={sessaoEscolhido} />
+          <PageTree setSessaoEscolhido={setSessaoEscolhido} setCpf={setCpf} cpf={cpf}
+          setNome={setNome} nome={nome} setAssento={setAssento}
+          sessaoEscolhido={sessaoEscolhido} />
           } />
-          <Route path="/sucesso" element={<PageFour sessaoEscolhido={sessaoEscolhido} />} />
+          <Route path="/sucesso" element={<PageFour nome={nome} cpf={cpf} assento={assento}
+          sessaoEscolhido={sessaoEscolhido} />} />
         </Routes>
       </Container>
     </BrowserRouter>

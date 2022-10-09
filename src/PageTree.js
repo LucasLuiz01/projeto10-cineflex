@@ -4,30 +4,28 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
-  const [chosen, setChosen] = useState([]);
-  const [nome, setNome] = useState("");
-  const [cpf, setCpf] = useState(Number);
+export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, setCpf, nome, setNome, setAssento}) {
+  const [chosen, setChosen] = useState({});
+  const [assentos, setAssentos] = useState([]);
   const navigate = useNavigate();
   let newChosen = {};
   let array = [];
-
   const params = useParams();
-
+console.log(chosen)
   function Selecionar(info) {
     if (info.isAvailable === false) {
       alert("Esse assento não está disponível");
       return;
     }
-    if (chosen[info.id] === true) {
-      chosen[info.id] = false;
+    if (chosen[info.id]?.selected) {
+      chosen[info.id] = { selected: false };
       const newChosen = { ...chosen };
-      newChosen[info.id] = false;
+      newChosen[info.id] = { selected: false };
       setChosen(newChosen);
       return;
     }
     newChosen = { ...chosen };
-    newChosen[info.id] = true;
+    newChosen[info.id] = { selected: true, name: `Assento ${info.name}` };
     setChosen(newChosen);
   }
   function postData(event) {
@@ -40,7 +38,7 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
 
     function objToArray(obj) {
       Object.keys(obj).forEach((key) => {
-        if (obj[key] === true) {
+        if (obj[key].selected === true) {
           array.push(key);
         }
       });
@@ -48,6 +46,7 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
       return array;
     }
     if(array[0] !== undefined){
+        setAssento(chosen)
     const url = "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many"
     const promisse = axios.post(url, {
         ids: array,
@@ -55,6 +54,7 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
 	    cpf: cpf
     })
     promisse.then((a)=>{ 
+        console.log(a)
     navigate("/sucesso")})
     promisse.catch((err)=> alert(err.response.data))
 } else{
@@ -83,7 +83,7 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido }) {
             <Botao
               onClick={() => Selecionar(info)}
               isAvailable={info.isAvailable}
-              isSelected={chosen[info.id] === true}
+              isSelected={chosen[info.id]?.selected}
             >
               {info.name}
             </Botao>
