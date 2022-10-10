@@ -2,9 +2,8 @@ import styled from "styled-components";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-
 export default function PageChoseMovie() {
-  const [object, setObject] = React.useState([1]);
+  const [object, setObject] = React.useState([]);
   useEffect(() => {
     const url = "https://mock-api.driven.com.br/api/v5/cineflex/movies";
     const promisse = axios.get(url);
@@ -15,22 +14,28 @@ export default function PageChoseMovie() {
       console.log(erro.response.data);
     });
   }, []);
-
+if(object !== undefined){
+    return (
+        <>
+          <Chose>
+            <p>Selecione o filme</p>
+          </Chose>
+          <Teste>
+            {object.map((o) => (
+                
+              <ImageMoovie
+              key={o.id}
+                tittle={o.tittle}
+                id={o.id}
+                imagem={o.posterURL}
+              />
+            ))}
+          </Teste>
+        </>
+      );
+}
   return (
     <>
-      <Chose>
-        <p>Selecione o filme</p>
-      </Chose>
-      <Teste>
-        {object.map((o) => (
-          <ImageMoovie
-            tittle={o.tittle}
-            key={o.id}
-            id={o.id}
-            imagem={o.posterURL}
-          />
-        ))}
-      </Teste>
     </>
   );
 }

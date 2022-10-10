@@ -11,7 +11,7 @@ import { useState } from "react";
 export default function App() {
   const [filmeEscolhido, setFilmeEscolhido] = useState(null);
   const [sessaoEscolhido, setSessaoEscolhido] = useState(null);
-  const [cpf, setCpf] = useState(Number);
+  const [cpf, setCpf] = useState("");
   const [assento, setAssento] = useState();
   const [nome, setNome] = useState("");
   return (

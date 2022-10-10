@@ -14,7 +14,7 @@ export default function PageTwo({ filmeEscolhido, setFilmeEscolhido }) {
     promisse.catch((erro) => {
       alert(erro.response.data);
     });
-  }, []);
+  }, [setFilmeEscolhido, params]);
   if (filmeEscolhido !== null) {
     return (
       <>
@@ -24,12 +24,12 @@ export default function PageTwo({ filmeEscolhido, setFilmeEscolhido }) {
         {filmeEscolhido.days.map((info) => {
           return (
             <>
-              <Dia>
+              <Dia key={info.id}>
                 {info.weekday} - {info.date}
               </Dia>
               <Horario>
                 {info.showtimes.map((inf) => (
-                    <Link to={`/sessao/${inf.id}`}>
+                    <Link key={inf.id} to={`/sessao/${inf.id}`}>
                   <button>{inf.name}</button>
                   </Link>
                 ))}
@@ -37,7 +37,7 @@ export default function PageTwo({ filmeEscolhido, setFilmeEscolhido }) {
             </>
           );
         })}
-        <Footer><img src={filmeEscolhido.posterURL} /><p>{filmeEscolhido.title}</p></Footer>
+        <Footer><img src={filmeEscolhido.posterURL} alt="filmeEscolhido" /><p>{filmeEscolhido.title}</p></Footer>
       </>
     );
   }

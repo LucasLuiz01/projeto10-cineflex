@@ -6,12 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, setCpf, nome, setNome, setAssento}) {
   const [chosen, setChosen] = useState({});
-  const [assentos, setAssentos] = useState([]);
   const navigate = useNavigate();
   let newChosen = {};
   let array = [];
   const params = useParams();
-console.log(chosen)
   function Selecionar(info) {
     if (info.isAvailable === false) {
       alert("Esse assento não está disponível");
@@ -54,7 +52,7 @@ console.log(chosen)
 	    cpf: cpf
     })
     promisse.then((a)=>{ 
-        console.log(a)
+        
     navigate("/sucesso")})
     promisse.catch((err)=> alert(err.response.data))
 } else{
@@ -71,7 +69,7 @@ console.log(chosen)
     promisse.catch((erro) => {
       alert(erro.response.data);
     });
-  }, []);
+  }, [setSessaoEscolhido, params]);
   if (sessaoEscolhido !== null) {
     return (
       <>
@@ -81,6 +79,7 @@ console.log(chosen)
         <Assentos>
           {sessaoEscolhido.seats.map((info) => (
             <Botao
+             key={info.id}
               onClick={() => Selecionar(info)}
               isAvailable={info.isAvailable}
               isSelected={chosen[info.id]?.selected}
@@ -122,7 +121,7 @@ console.log(chosen)
           </Flex>
         </form>
         <Footer>
-          <img src={sessaoEscolhido.movie.posterURL} />
+          <img src={sessaoEscolhido.movie.posterURL} alt="sessaoEscolhida" />
           <FLexDirection>
             <p>{sessaoEscolhido.movie.title} </p>
             <p>
@@ -197,6 +196,7 @@ const Button = styled.button`
 const Compra = styled.div`
   background-color: #ffffff;
   width: 100vw;
+  margin-left: 20px;
   p {
     font-family: "Roboto", sans-serif;
     font-weight: 400;
