@@ -4,7 +4,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, setCpf, nome, setNome, setAssento}) {
+export default function PageTree({
+  sessaoEscolhido,
+  setSessaoEscolhido,
+  cpf,
+  setCpf,
+  nome,
+  setNome,
+  setAssento,
+}) {
   const [chosen, setChosen] = useState({});
   const navigate = useNavigate();
   let newChosen = {};
@@ -28,9 +36,9 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, set
   }
   function postData(event) {
     event.preventDefault();
-    if(cpf.length !== 11){
-        alert("O CPF tem que ter 11 digítos");
-        return
+    if (cpf.length !== 11) {
+      alert("O CPF tem que ter 11 digítos");
+      return;
     }
     objToArray(chosen);
 
@@ -43,22 +51,23 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, set
 
       return array;
     }
-    if(array[0] !== undefined){
-        setAssento(chosen)
-    const url = "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many"
-    const promisse = axios.post(url, {
+    if (array[0] !== undefined) {
+      setAssento(chosen);
+      const url =
+        "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many";
+      const promisse = axios.post(url, {
         ids: array,
-	    name: nome,
-	    cpf: cpf
-    })
-    promisse.then((a)=>{ 
-        
-    navigate("/sucesso")})
-    promisse.catch((err)=> alert(err.response.data))
-} else{
-    alert("Selecione pelo menos 1 assento válido")
-    return
-}
+        name: nome,
+        cpf: cpf,
+      });
+      promisse.then((a) => {
+        navigate("/sucesso");
+      });
+      promisse.catch((err) => alert(err.response.data));
+    } else {
+      alert("Selecione pelo menos 1 assento válido");
+      return;
+    }
   }
   useEffect(() => {
     const Url = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${params.idSessao}/seats`;
@@ -79,7 +88,8 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, set
         <Assentos>
           {sessaoEscolhido.seats.map((info) => (
             <Botao
-             key={info.id}
+              data-identifier="seat"
+              key={info.id}
               onClick={() => Selecionar(info)}
               isAvailable={info.isAvailable}
               isSelected={chosen[info.id]?.selected}
@@ -89,8 +99,8 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, set
           ))}
         </Assentos>
         <Disponibilidade>
-          <Button color="#1AAE9E" /> <Button color="#C3CFD9" />{" "}
-          <Button color="#FBE192" />
+          <Button ata-identifier="seat-selected-subtitle" color="#1AAE9E" /> <Button data-identifier="seat-available-subtitle" color="#C3CFD9" />{" "}
+          <Button data-identifier="seat-unavailable-subtitle" color="#FBE192" />
         </Disponibilidade>
         <Disponibilidade>
           <p>Selecionado</p>
@@ -100,7 +110,7 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, set
         <form onSubmit={postData}>
           <Compra>
             <p>Nome do comprador:</p>
-            <input
+            <input data-identifier="buyer-name-input"
               required
               type="text"
               value={nome}
@@ -108,7 +118,7 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, set
               placeholder="Digite seu nome..."
             ></input>
             <p>CPF do comprador:</p>
-            <input
+            <input data-identifier="buyer-cpf-input"
               required
               type="text"
               value={cpf}
@@ -117,13 +127,15 @@ export default function PageTree({ sessaoEscolhido, setSessaoEscolhido, cpf, set
             ></input>
           </Compra>
           <Flex>
-            <EscolherAssento type="submit">Reservar assento(s)</EscolherAssento>
+            <EscolherAssento data-identifier="reservation-btn" type="submit">Reservar assento(s)</EscolherAssento>
           </Flex>
         </form>
         <Footer>
           <img src={sessaoEscolhido.movie.posterURL} alt="sessaoEscolhida" />
           <FLexDirection>
-            <p>{sessaoEscolhido.movie.title} </p>
+            <p data-identifier="movie-and-session-infos-preview">
+              {sessaoEscolhido.movie.title}{" "}
+            </p>
             <p>
               {sessaoEscolhido.day.weekday} - {sessaoEscolhido.name}
             </p>

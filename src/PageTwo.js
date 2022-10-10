@@ -24,20 +24,26 @@ export default function PageTwo({ filmeEscolhido, setFilmeEscolhido }) {
         {filmeEscolhido.days.map((info) => {
           return (
             <>
-              <Dia key={info.id}>
+              <Dia data-identifier="session-date" key={info.id}>
+                {" "}
                 {info.weekday} - {info.date}
               </Dia>
               <Horario>
                 {info.showtimes.map((inf) => (
-                    <Link key={inf.id} to={`/sessao/${inf.id}`}>
-                  <button>{inf.name}</button>
+                  <Link key={inf.id} to={`/sessao/${inf.id}`}>
+                    <button data-identifier="hour-minute-btn">
+                      {inf.name}
+                    </button>
                   </Link>
                 ))}
               </Horario>
             </>
           );
         })}
-        <Footer><img src={filmeEscolhido.posterURL} alt="filmeEscolhido" /><p>{filmeEscolhido.title}</p></Footer>
+        <Footer>
+          <img data-identifier="movie-img-preview" src={filmeEscolhido.posterURL} alt="filmeEscolhido" />
+          <p>{filmeEscolhido.title}</p>
+        </Footer>
       </>
     );
   }
@@ -96,12 +102,12 @@ const Footer = styled.div`
   bottom: 0;
   position: fixed;
   border: 1px solid #9eadba;
-    img {
-        width: 48px;
-        height: 72px;
-        margin-left: 20px;
+  img {
+    width: 48px;
+    height: 72px;
+    margin-left: 20px;
   }
-    p {
+  p {
     font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 26px;

@@ -28,27 +28,27 @@ export default function PageFour({ sessaoEscolhido, cpf, nome, assento }) {
         <Chose>
           <p>Pedido feito com sucesso!</p>
         </Chose>
-        <Filme>
+        <Filme data-identifier="movie-session-infos-reserve-finished">
           <h1>Filme e sessão</h1>
           <p>{sessaoEscolhido.movie.title}</p>
           <p>
             {sessaoEscolhido.day.date} {sessaoEscolhido.name}
           </p>
         </Filme>
-        <Filme>
+        <Filme data-identifier="seat-infos-reserve-finished">
           <h1>Ingressos</h1>
           {array.map((a) => (
             <p> {a}</p>
           ))}
         </Filme>
-        <Filme>
+        <Filme data-identifier="buyer-infos-reserve-finished">
           <h1>Comprador</h1>
           <p>Nome: {nome}</p>
           <p>CPF: {cpfAtualizado}</p>
         </Filme>
         <Flex>
           <Link to="/">
-            <EscolherAssento>Voltar pra Home</EscolherAssento>
+            <EscolherAssento data-identifier="back-to-home-btn" >Voltar pra Home</EscolherAssento>
           </Link>
         </Flex>
       </>

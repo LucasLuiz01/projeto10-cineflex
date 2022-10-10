@@ -14,30 +14,27 @@ export default function PageChoseMovie() {
       console.log(erro.response.data);
     });
   }, []);
-if(object !== undefined){
+  if (object !== undefined) {
     return (
-        <>
-          <Chose>
-            <p>Selecione o filme</p>
-          </Chose>
-          <Teste>
-            {object.map((o) => (
-                
-              <ImageMoovie
+      <>
+        <Chose>
+          <p>Selecione o filme</p>
+        </Chose>
+        <Teste>
+          {object.map((o) => (
+            <ImageMoovie
+              data-identifier="movie-outdoor"
               key={o.id}
-                tittle={o.tittle}
-                id={o.id}
-                imagem={o.posterURL}
-              />
-            ))}
-          </Teste>
-        </>
-      );
-}
-  return (
-    <>
-    </>
-  );
+              tittle={o.tittle}
+              id={o.id}
+              imagem={o.posterURL}
+            />
+          ))}
+        </Teste>
+      </>
+    );
+  }
+  return <></>;
 }
 function ImageMoovie({ imagem, id, tittle }) {
   return (
